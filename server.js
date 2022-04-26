@@ -2,19 +2,18 @@
 
 import bodyParser from 'body-parser';
 import express from 'express';
-import OAuthServer from 'express-oauth-server';
-import { Request, Response } from 'oauth2-server';
+import OauthServer from 'express-oauth-server';
 import mongoose from 'mongoose';
-import * as model from './model';
+import * as model from './model.js';
 
-const { MONGO_USER, MONGO_PASS, MONGO_HOST } = process.env;
+const { MONGO_USER, MONGO_PWORD, MONGO_HOST } = process.env;
 
 mongoose.connect(`mongodb+srv://` +
           MONGO_USER +
           `:` +
-          MONGO_PASS +
+          MONGO_PWORD +
           `@` +
-          configService.get<string>('MONGO_HOST') +
+          MONGO_HOST +
     `/security?retryWrites=true&w=majority`)
           
 var app = express();
@@ -23,7 +22,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(bodyParser.json());
 
-app.oauth = new OAuthServer({
+app.oauth = new OAuth2Server({
   model: model
 });
 

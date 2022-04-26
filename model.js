@@ -1,54 +1,88 @@
 /** @format */
 
-import { Schema , model } from 'mongoose';
+import mongoosePackage from 'mongoose';
+const { Schema, model } = mongoosePackage;
 
 /**
  * Schema definitions.
  */
 
-model(
-  'OAuthTokens',
-  new Schema({
-    accessToken: { type: String },
-    accessTokenExpiresOn: { type: Date },
-    client: { type: Object }, // `client` and `user` are required in multiple places, for example `getAccessToken()`
-    clientId: { type: String },
-    refreshToken: { type: String },
-    refreshTokenExpiresOn: { type: Date },
-    user: { type: Object },
-    userId: { type: String },
-  })
+let OAuthAccessTokenModel = mongoose.model(
+  'OAuthAccessToken',
+  new mongoose.Schema(
+    {
+      user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+      client: { type: mongoose.Schema.Types.ObjectId, ref: 'OAuthClient' },
+      accessToken: { type: String },
+      accessTokenExpiresAt: { type: Date },
+      refreshToken: { type: String },
+      refreshTokenExpiresAt: { type: Date },
+      scope: { type: String },
+    },
+    {
+      timestamps: true,
+    }
+  ),
+  'oauth_access_tokens'
 );
 
-model(
-  'OAuthClients',
-  new Schema({
-    clientId: { type: String },
-    clientSecret: { type: String },
-    redirectUris: { type: Array },
-  })
+let OAuthClientModel = mongoose.model(
+  'OAuthClient',
+  new mongoose.Schema(
+    {
+      user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+      clientId: { type: String },
+      clientSecret: { type: String },
+      redirectUris: { type: Array },
+      grants: { type: Array },
+    },
+    {
+      timestamps: true,
+    }
+  ),
+  'oauth_clients'
 );
 
-model(
-  'OAuthUsers',
-  new Schema({
-    email: { type: String, default: '' },
-    firstname: { type: String },
-    lastname: { type: String },
-    password: { type: String },
-    username: { type: String },
-  })
+let UserModel = mongoose.model(
+  'User',
+  new mongoose.Schema(
+    {
+      email: { type: String, unique:true},
+      firstname: { type: String },
+      lastname: { type: String },
+      password: { type: String },
+      username: { type: String , unique:true},
+      verificationCode: { type: String },
+      verifiedAt: { type: Date },
+    },
+    {
+      timestamps: true,
+    }
+  ),
+  'user'
 );
 
-var OAuthTokensModel = model('OAuthTokens');
-var OAuthClientsModel = model('OAuthClients');
-var OAuthUsersModel = model('OAuthUsers');
-
+let OAuthCodeModel = mongoose.model(
+  'OAuthCode',
+  new mongoose.Schema(
+    {
+      user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+      client: { type: mongoose.Schema.Types.ObjectId, ref: 'OAuthClient' },
+      authorizationCode: { type: String },
+      expiresAt: { type: Date },
+      scope: { type: String },
+    },
+    {
+      timestamps: true,
+    }
+  ),
+  'oauth_auth_codes'
+);
 /**
  * Get access token.
  */
 
-export function getAccessToken (bearerToken) {
+export function getAccessToken(bearerToken) {
   // Adding `.lean()`, as we get a mongoose wrapper object back from `findOne(...)`, and oauth2-server complains.
   return OAuthTokensModel.findOne({ accessToken: bearerToken }).lean();
 }
@@ -57,7 +91,7 @@ export function getAccessToken (bearerToken) {
  * Get client.
  */
 
-export function getClient (clientId, clientSecret) {
+export function getClient(clientId, clientSecret) {
   return OAuthClientsModel.findOne({
     clientId: clientId,
     clientSecret: clientSecret,
@@ -68,7 +102,7 @@ export function getClient (clientId, clientSecret) {
  * Get refresh token.
  */
 
-export function getRefreshToken (refreshToken) {
+export function getRefreshToken(refreshToken) {
   return OAuthTokensModel.findOne({ refreshToken: refreshToken }).lean();
 }
 
@@ -76,7 +110,7 @@ export function getRefreshToken (refreshToken) {
  * Get user.
  */
 
-export function getUser (username, password) {
+export function getUser(username, password) {
   return OAuthUsersModel.findOne({
     username: username,
     password: password,
@@ -87,7 +121,7 @@ export function getUser (username, password) {
  * Save token.
  */
 
-export function saveToken (token, client, user) {
+export function saveToken(token, client, user) {
   var accessToken = new OAuthTokensModel({
     accessToken: token.accessToken,
     accessTokenExpiresOn: token.accessTokenExpiresOn,

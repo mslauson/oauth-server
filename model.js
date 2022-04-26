@@ -1,6 +1,9 @@
 /** @format */
 
 import mongoosePackage from 'mongoose';
+import OAuthAccessTokenModel from './dao/oauth-token.js';
+import OAuthCodeModel from './dao/oauth-auth-code.js'; 
+import OAuthClientModel from './dao/oauth-client.js';
 const { Schema, model } = mongoosePackage;
 
 export const getAccessToken = async (accessToken) => {

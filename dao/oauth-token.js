@@ -1,4 +1,7 @@
-export default OAuthAccessTokenModel = model(
+import mongoosePackage from 'mongoose';
+const { Schema, model } = mongoosePackage;
+
+const OAuthAccessTokenModel = model(
   'OAuthAccessToken',
   new Schema(
     {
@@ -16,3 +19,5 @@ export default OAuthAccessTokenModel = model(
   ),
   'oauth_access_tokens'
 );
+
+export default OAuthAccessTokenModel;

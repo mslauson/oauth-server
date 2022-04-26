@@ -5,7 +5,7 @@ import express from 'express';
 import mongoose from 'mongoose';
 import oauthRoutes from './routes/oauth.js'
 
-const { MONGO_USER, MONGO_PWORD, MONGO_HOST } = process.env;
+const { MONGO_USER, MONGO_PWORD, MONGO_HOST, PORT } = process.env;
 
 mongoose.connect(`mongodb+srv://` +
           MONGO_USER +
@@ -22,3 +22,5 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 app.use(oauthRoutes);
+
+app.listen(PORT || 8080);

@@ -1,12 +1,15 @@
-export default UserModel = model(
+import mongoosePackage from 'mongoose';
+const { Schema, model } = mongoosePackage;
+
+const UserModel = model(
   'User',
   new Schema(
     {
-      email: { type: String, unique:true},
+      email: { type: String, unique: true },
       firstname: { type: String },
       lastname: { type: String },
       password: { type: String },
-      username: { type: String , unique:true},
+      username: { type: String, unique: true },
       verificationCode: { type: String },
       verifiedAt: { type: Date },
     },
@@ -16,3 +19,5 @@ export default UserModel = model(
   ),
   'user'
 );
+
+export default UserModel;

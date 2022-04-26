@@ -14,21 +14,20 @@ let oauth = new OauthServer({
 });
 
 router.post(
-  '/api/v1/oauth/token',
+  '/api/oauth/v1/token',
   oauth.token({
     requireClientAuthentication: {
-      authorization_code: false,
       refresh_token: false,
     },
   })
 );
 
-router.get('/api/v1/oauth/authenticate', async (req, res, next) => {
+router.get('/api/oauth/v1/authenticate', async (req, res, next) => {
   return res.render('authenticate');
 });
 
 router.post(
-  '/api/v1/oauth/authenticate',
+  '/api/oauth/v1/authenticate',
   async (req, res, next) => {
     let UserModel = mongoose.model('User');
     req.body.user = await UserModel.findOne({ username: req.body.username });

@@ -1,13 +1,12 @@
 /** @format */
 
-var mongoose = require('mongoose');
-var Schema = mongoose.Schema;
+import { Schema , model } from 'mongoose';
 
 /**
  * Schema definitions.
  */
 
-mongoose.model(
+model(
   'OAuthTokens',
   new Schema({
     accessToken: { type: String },
@@ -21,7 +20,7 @@ mongoose.model(
   })
 );
 
-mongoose.model(
+model(
   'OAuthClients',
   new Schema({
     clientId: { type: String },
@@ -30,7 +29,7 @@ mongoose.model(
   })
 );
 
-mongoose.model(
+model(
   'OAuthUsers',
   new Schema({
     email: { type: String, default: '' },
@@ -41,54 +40,54 @@ mongoose.model(
   })
 );
 
-var OAuthTokensModel = mongoose.model('OAuthTokens');
-var OAuthClientsModel = mongoose.model('OAuthClients');
-var OAuthUsersModel = mongoose.model('OAuthUsers');
+var OAuthTokensModel = model('OAuthTokens');
+var OAuthClientsModel = model('OAuthClients');
+var OAuthUsersModel = model('OAuthUsers');
 
 /**
  * Get access token.
  */
 
-module.exports.getAccessToken = function (bearerToken) {
+export function getAccessToken (bearerToken) {
   // Adding `.lean()`, as we get a mongoose wrapper object back from `findOne(...)`, and oauth2-server complains.
   return OAuthTokensModel.findOne({ accessToken: bearerToken }).lean();
-};
+}
 
 /**
  * Get client.
  */
 
-module.exports.getClient = function (clientId, clientSecret) {
+export function getClient (clientId, clientSecret) {
   return OAuthClientsModel.findOne({
     clientId: clientId,
     clientSecret: clientSecret,
   }).lean();
-};
+}
 
 /**
  * Get refresh token.
  */
 
-module.exports.getRefreshToken = function (refreshToken) {
+export function getRefreshToken (refreshToken) {
   return OAuthTokensModel.findOne({ refreshToken: refreshToken }).lean();
-};
+}
 
 /**
  * Get user.
  */
 
-module.exports.getUser = function (username, password) {
+export function getUser (username, password) {
   return OAuthUsersModel.findOne({
     username: username,
     password: password,
   }).lean();
-};
+}
 
 /**
  * Save token.
  */
 
-module.exports.saveToken = function (token, client, user) {
+export function saveToken (token, client, user) {
   var accessToken = new OAuthTokensModel({
     accessToken: token.accessToken,
     accessTokenExpiresOn: token.accessTokenExpiresOn,
@@ -122,4 +121,4 @@ module.exports.saveToken = function (token, client, user) {
 
     return data;
   });
-};
+}

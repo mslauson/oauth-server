@@ -17,10 +17,11 @@ const createUser = async (requestBody) => {
   newUser.createdAt = new Date();
   newUser.updatedAt = new Date();
 
-  const user = await newUser.save();
+  const user = (await newUser.create()).toObject();
+  return user;
 };
 
-const createClient = async (requestBody, client) => {
+const createClient = async (user) => {
   const newClient = OAuthClientModel();
   newClient.grants = defaults.grants;
   newClient.user = client._id;
@@ -28,10 +29,12 @@ const createClient = async (requestBody, client) => {
   newClient.clientSecret = crypto.randomBytes(50).toString('hex');
   newClient.createdAt = new Date();
   newClient.updatedAt = new Date();
+  const client = (await newClient.create()).toObject();
+  return client;
 };
 
 export const signUp = async (requestBody) => {
   const user = createUser(requestBody);
-  const newClient = createClient(requestBody, client);
+  const newClient = createClient(user);
   return { success: true };
 };

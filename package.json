@@ -7,16 +7,17 @@
         "start": "node server.js",
         "local": "nodemon server.js",
         "test": "echo \"Error: no test specified\" && exit 1",
-        "lint": "eslint ."
+        "lint": "eslint . --fix"
     },
     "keywords": [],
     "author": "",
     "license": "ISC",
     "type": "module",
     "dependencies": {
+        "body-parser": "^1.20.0",
         "express": "^4.18.0",
-        "mongoose": "^6.3.1",
-        "oauth2-server": "^3.1.1"
+        "express-oauth-server": "^2.0.0",
+        "mongoose": "^6.3.1"
     },
     "devDependencies": {
         "@babel/cli": "^7.17.6",

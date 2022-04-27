@@ -1,26 +1,22 @@
 /** @format */
 
-import bodyParser from 'body-parser';
-import express from 'express';
-import mongoose from 'mongoose';
-import oauthRoutes from './routes/oauth.js'
+import bodyParser from 'body-parser'
+import express from 'express'
+import mongoose from 'mongoose'
+import oauthRoutes from './routes/oauth'
 
-const { MONGO_USER, MONGO_PWORD, MONGO_HOST, PORT } = process.env;
+const { MONGO_USER, MONGO_PWORD, MONGO_HOST, PORT } = process.env
 
-mongoose.connect(`mongodb+srv://` +
-          MONGO_USER +
-          `:` +
-          MONGO_PWORD +
-          `@` +
-          MONGO_HOST +
-    `/security?retryWrites=true&w=majority`)
-          
-var app = express();
+mongoose.connect(
+    `mongodb+srv://${MONGO_USER}:${MONGO_PWORD}@${MONGO_HOST}/security?retryWrites=true&w=majority`
+)
 
-app.use(bodyParser.urlencoded({ extended: true }));
+const app = express()
 
-app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }))
 
-app.use(oauthRoutes);
+app.use(bodyParser.json())
 
-app.listen(PORT || 8080);
+app.use(oauthRoutes)
+
+app.listen(PORT || 8080)

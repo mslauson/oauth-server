@@ -1,103 +1,100 @@
-/** @format */
-
-import mongoosePackage from 'mongoose';
-import OAuthAccessTokenModel from './dao/oauth-token.js';
-import OAuthCodeModel from './dao/oauth-auth-code.js'; 
-import OAuthClientModel from './dao/oauth-client.js';
-const { Schema, model } = mongoosePackage;
+import OAuthAccessTokenModel from './dao/oauth-token'
+import OAuthCodeModel from './dao/oauth-auth-code'
+import OAuthClientModel from './dao/oauth-client'
+import UserModel from './dao/user'
 
 export const getAccessToken = async (accessToken) => {
-
-    let _accessToken = await OAuthAccessTokenModel.findOne({ accessToken: accessToken })
+    let token = await OAuthAccessTokenModel.findOne({
+        accessToken,
+    })
         .populate('user')
-        .populate('client');
+        .populate('client')
 
-    if (!_accessToken) {
-        return false;
+    if (!token) {
+        return false
     }
 
-    _accessToken = _accessToken.toObject();
+    token = token.toObject()
 
-    if (!_accessToken.user) {
-        _accessToken.user = {};
+    if (!token.user) {
+        token.user = {}
     }
-    return _accessToken;
-};
+    return token
+}
 
 export const refreshTokenModel = (refreshToken) => {
-    return OAuthAccessTokenModel.findOne({ refreshToken: refreshToken })
+    return OAuthAccessTokenModel.findOne({ refreshToken })
         .populate('user')
-        .populate('client');
-};
+        .populate('client')
+}
 
 export const getAuthorizationCode = (code) => {
     return OAuthCodeModel.findOne({ authorizationCode: code })
         .populate('user')
-        .populate('client');
-};
+        .populate('client')
+}
 
 export const getClient = (clientId, clientSecret) => {
-    let params = { clientId: clientId };
+    const params = { clientId }
     if (clientSecret) {
-        params.clientSecret = clientSecret;
+        params.clientSecret = clientSecret
     }
-    return OAuthClientModel.findOne(params);
-};
+    return OAuthClientModel.findOne(params)
+}
 
 export const getUser = async (username, password) => {
-    let UserModel = model('User');
-    let user = await UserModel.findOne({ username: username });
+    const user = await UserModel.findOne({ username })
     if (user.validatePassword(password)) {
-        return user;
+        return user
     }
-    return false;
-};
+    return false
+}
 
 export const getUserFromClient = (client) => {
-    // let UserModel = model('User');
-    // return UserModel.findById(client.user);
-    return {};
-};
+    return UserModel.findById(client.user)
+}
 
 export const saveToken = async (token, client, user) => {
-    let accessToken = (await OAuthAccessTokenModel.create({
-        user: user.id || null,
-        client: client.id,
-        accessToken: token.accessToken,
-        accessTokenExpiresAt: token.accessTokenExpiresAt,
-        refreshToken: token.refreshToken,
-        refreshTokenExpiresAt: token.refreshTokenExpiresAt,
-        scope: token.scope,
-    })).toObject();
+    const accessToken = (
+        await OAuthAccessTokenModel.create({
+            user: user.id || null,
+            client: client.id,
+            accessToken: token.accessToken,
+            accessTokenExpiresAt: token.accessTokenExpiresAt,
+            refreshToken: token.refreshToken,
+            refreshTokenExpiresAt: token.refreshTokenExpiresAt,
+            scope: token.scope,
+        })
+    ).toObject()
 
     if (!accessToken.user) {
-        accessToken.user = {};
+        accessToken.user = {}
     }
 
-    return accessToken;
-};
+    return accessToken
+}
 
 export const saveAuthorizationCode = (code, client, user) => {
-    let authCode = new OAuthCodeModel({
+    const authCode = new OAuthCodeModel({
         user: user.id,
         client: client.id,
         authorizationCode: code.authorizationCode,
         expiresAt: code.expiresAt,
-        scope: code.scope
-    });
-    return authCode.save();
-};
+        scope: code.scope,
+    })
+    return authCode.save()
+}
 
 export const revokeToken = async (accessToken) => {
-    let result = await OAuthAccessTokenModel.deleteOne({
-        accessToken: accessToken
-    });
-    return result.deletedCount > 0;
-};
+    const result = await OAuthAccessTokenModel.deleteOne({
+        accessToken,
+    })
+    return result.deletedCount > 0
+}
 
 export const revokeAuthorizationCode = async (code) => {
-    let result = await OAuthCodeModel.deleteOne({
-        authorizationCode: code.authorizationCode
-    });
-    return result.deletedCount > 0;
-};
+    const result = await OAuthCodeModel.deleteOne({
+        authorizationCode: code.authorizationCode,
+    })
+    return result.deletedCount > 0
+}

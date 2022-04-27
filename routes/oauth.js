@@ -1,7 +1,7 @@
 import express from 'express'
 import OauthServer from 'express-oauth-server'
 import mongoose from 'mongoose'
-import * as model from '../model'
+import * as model from '../model.js'
 
 const router = express.Router()
 

@@ -1,8 +1,8 @@
 import crypto from 'crypto'
-import UserModel from '../dao/user'
-import OAuthClientModel from '../dao/oauth-client'
+import UserModel from '../dao/user.js'
+import OAuthClientModel from '../dao/oauth-client.js'
 
-import { defaults } from '../constants/oauth-constants'
+import { defaults } from '../constants/oauth-constants.js'
 
 const createUser = async (requestBody) => {
     const newVerificationCode = crypto.randomBytes(28).toString('hex')

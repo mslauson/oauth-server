@@ -3,7 +3,7 @@
 import bodyParser from 'body-parser'
 import express from 'express'
 import mongoose from 'mongoose'
-import oauthRoutes from './routes/oauth'
+import oauthRoutes from './routes/oauth.js'
 
 const { MONGO_USER, MONGO_PWORD, MONGO_HOST, PORT } = process.env
 

@@ -1,7 +1,7 @@
-import OAuthAccessTokenModel from './dao/oauth-token'
-import OAuthCodeModel from './dao/oauth-auth-code'
-import OAuthClientModel from './dao/oauth-client'
-import UserModel from './dao/user'
+import OAuthAccessTokenModel from './dao/oauth-token.js'
+import OAuthCodeModel from './dao/oauth-auth-code.js'
+import OAuthClientModel from './dao/oauth-client.js'
+import UserModel from './dao/user.js'
 
 export const getAccessToken = async (accessToken) => {
     let token = await OAuthAccessTokenModel.findOne({

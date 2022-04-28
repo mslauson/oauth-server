@@ -17,13 +17,12 @@ const createUser = async (requestBody) => {
     newUser.createdAt = new Date()
     newUser.updatedAt = new Date()
 
-    const user = (await newUser.create()).toObject()
-    return user
+    return  newUser.create().toObject()
 }
 
 const createClient = async (user) => {
     const newClient = OAuthClientModel()
-    newClient.grants = defaults.grants
+    newClient.grants = defaults.GRANTS
     newClient.user = user.id
     newClient.clientId = crypto.randomBytes(25).toString('hex')
     newClient.clientSecret = crypto.randomBytes(50).toString('hex')

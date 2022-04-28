@@ -2,6 +2,7 @@ import express from 'express'
 import OauthServer from 'express-oauth-server'
 import mongoose from 'mongoose'
 import * as model from '../model.js'
+import { signUp } from '../service/user-management.js'
 
 const router = express.Router()
 
@@ -39,5 +40,9 @@ router.post(
         },
     })
 )
+
+router.post('/api/oauth/v1/authenticate', async (req) => {
+    return signUp(req)
+})
 
 export default router

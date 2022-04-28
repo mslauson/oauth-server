@@ -1,6 +1,6 @@
-import mongoosePackage from 'mongoose'
+import mongoosePackage from 'mongoose';
 
-const { Schema, model } = mongoosePackage
+const { Schema, model } = mongoosePackage;
 
 const OAuthCodeModel = model(
     'OAuthCode',
@@ -17,6 +17,6 @@ const OAuthCodeModel = model(
         }
     ),
     'oauth_auth_codes'
-)
+);
 
-export default OAuthCodeModel
+export default OAuthCodeModel;

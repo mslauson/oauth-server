@@ -1,6 +1,6 @@
-import mongoosePackage from 'mongoose'
+import mongoosePackage from 'mongoose';
 
-const { Schema, model } = mongoosePackage
+const { Schema, model } = mongoosePackage;
 
 const UserModel = model(
     'User',
@@ -19,6 +19,6 @@ const UserModel = model(
         }
     ),
     'user'
-)
+);
 
-export default UserModel
+export default UserModel;

@@ -1,6 +1,6 @@
-import mongoosePackage from 'mongoose'
+import mongoosePackage from 'mongoose';
 
-const { Schema, model } = mongoosePackage
+const { Schema, model } = mongoosePackage;
 
 const OAuthAccessTokenModel = model(
     'OAuthAccessToken',
@@ -19,6 +19,6 @@ const OAuthAccessTokenModel = model(
         }
     ),
     'oauth_access_tokens'
-)
+);
 
-export default OAuthAccessTokenModel
+export default OAuthAccessTokenModel;

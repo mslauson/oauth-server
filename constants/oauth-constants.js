@@ -5,9 +5,9 @@ export const defaults = Object.freeze({
         'refresh_token',
         'password',
     ],
-})
+});
 
 export const validationMessages = Object.freeze({
     SIGN_UP_VALIDATE:
         'Required parameters are firstName, lastName, username, email, and password',
-})
+});

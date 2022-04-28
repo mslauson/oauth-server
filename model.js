@@ -1,58 +1,58 @@
-import OAuthAccessTokenModel from './dao/oauth-token.js'
-import OAuthCodeModel from './dao/oauth-auth-code.js'
-import OAuthClientModel from './dao/oauth-client.js'
-import UserModel from './dao/user.js'
+import OAuthAccessTokenModel from './dao/oauth-token.js';
+import OAuthCodeModel from './dao/oauth-auth-code.js';
+import OAuthClientModel from './dao/oauth-client.js';
+import UserModel from './dao/user.js';
 
 export const getAccessToken = async (accessToken) => {
     let token = await OAuthAccessTokenModel.findOne({
         accessToken,
     })
         .populate('user')
-        .populate('client')
+        .populate('client');
 
     if (!token) {
-        return false
+        return false;
     }
 
-    token = token.toObject()
+    token = token.toObject();
 
     if (!token.user) {
-        token.user = {}
+        token.user = {};
     }
-    return token
-}
+    return token;
+};
 
 export const refreshTokenModel = (refreshToken) => {
     return OAuthAccessTokenModel.findOne({ refreshToken })
         .populate('user')
-        .populate('client')
-}
+        .populate('client');
+};
 
 export const getAuthorizationCode = (code) => {
     return OAuthCodeModel.findOne({ authorizationCode: code })
         .populate('user')
-        .populate('client')
-}
+        .populate('client');
+};
 
 export const getClient = (clientId, clientSecret) => {
-    const params = { clientId }
+    const params = { clientId };
     if (clientSecret) {
-        params.clientSecret = clientSecret
+        params.clientSecret = clientSecret;
     }
-    return OAuthClientModel.findOne(params)
-}
+    return OAuthClientModel.findOne(params);
+};
 
 export const getUser = async (username, password) => {
-    const user = await UserModel.findOne({ username })
+    const user = await UserModel.findOne({ username });
     if (user.validatePassword(password)) {
-        return user
+        return user;
     }
-    return false
-}
+    return false;
+};
 
 export const getUserFromClient = (client) => {
-    return UserModel.findById(client.user)
-}
+    return UserModel.findById(client.user);
+};
 
 export const saveToken = async (token, client, user) => {
     const accessToken = (
@@ -65,14 +65,14 @@ export const saveToken = async (token, client, user) => {
             refreshTokenExpiresAt: token.refreshTokenExpiresAt,
             scope: token.scope,
         })
-    ).toObject()
+    ).toObject();
 
     if (!accessToken.user) {
-        accessToken.user = {}
+        accessToken.user = {};
     }
 
-    return accessToken
-}
+    return accessToken;
+};
 
 export const saveAuthorizationCode = (code, client, user) => {
     const authCode = new OAuthCodeModel({
@@ -81,20 +81,20 @@ export const saveAuthorizationCode = (code, client, user) => {
         authorizationCode: code.authorizationCode,
         expiresAt: code.expiresAt,
         scope: code.scope,
-    })
-    return authCode.save()
-}
+    });
+    return authCode.save();
+};
 
 export const revokeToken = async (accessToken) => {
     const result = await OAuthAccessTokenModel.deleteOne({
         accessToken,
-    })
-    return result.deletedCount > 0
-}
+    });
+    return result.deletedCount > 0;
+};
 
 export const revokeAuthorizationCode = async (code) => {
     const result = await OAuthCodeModel.deleteOne({
         authorizationCode: code.authorizationCode,
-    })
-    return result.deletedCount > 0
-}
+    });
+    return result.deletedCount > 0;
+};

@@ -1,6 +1,6 @@
-import mongoosePackage from 'mongoose'
+import mongoosePackage from 'mongoose';
 
-const { Schema, model } = mongoosePackage
+const { Schema, model } = mongoosePackage;
 
 const OAuthClientModel = model(
     'OAuthClient',
@@ -18,6 +18,6 @@ const OAuthClientModel = model(
         }
     ),
     'oauth_clients'
-)
+);
 
-export default OAuthClientModel
+export default OAuthClientModel;

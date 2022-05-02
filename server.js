@@ -1,3 +1,4 @@
+import { handleError } from '@mslauson/express-error-handler';
 import bodyParser from 'body-parser';
 import express from 'express';
 import mongoose from 'mongoose';
@@ -17,4 +18,5 @@ app.use(bodyParser.json());
 
 app.use(oauthRoutes);
 
+app.use(handleError);
 app.listen(PORT || 8080);

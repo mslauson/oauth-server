@@ -44,9 +44,10 @@ router.post(
     })
 );
 
-router.post('/api/oauth/v1/authenticate', async (req) => {
-    validateSignUp(req);
-    return signUp(req);
+router.post('/api/oauth/v1/register', async (req, res, next) => {
+    const request = req.body;
+    validateSignUp(request, next);
+    return signUp(request);
 });
 
 export default router;

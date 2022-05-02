@@ -6,7 +6,7 @@ import { defaults } from '../constants/oauth-constants.js';
 
 const createUser = async (requestBody) => {
     const newVerificationCode = crypto.randomBytes(28).toString('hex');
-    const newUser = UserModel();
+    const newUser = new UserModel();
 
     newUser.firstName = requestBody.firstName;
     newUser.lastName = requestBody.lastName;
@@ -17,11 +17,11 @@ const createUser = async (requestBody) => {
     newUser.createdAt = new Date();
     newUser.updatedAt = new Date();
 
-    return newUser.create().toObject();
+    return newUser.save().toObject();
 };
 
 const createClient = async (user) => {
-    const newClient = OAuthClientModel();
+    const newClient = new OAuthClientModel();
     newClient.grants = defaults.GRANTS;
     newClient.user = user.id;
     newClient.clientId = crypto.randomBytes(25).toString('hex');
@@ -30,7 +30,7 @@ const createClient = async (user) => {
     newClient.updatedAt = new Date();
     let client;
     try {
-        client = (await newClient.create()).toObject();
+        client = (await newClient.save()).toObject();
     } catch (error) {
         console.error(error);
     }

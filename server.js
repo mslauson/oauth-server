@@ -1,8 +1,9 @@
-import { handleError } from '@mslauson/express-error-handler';
 import bodyParser from 'body-parser';
 import express from 'express';
 import mongoose from 'mongoose';
-import oauthRoutes from './routes/router.js';
+import OauthRouter from './router/oauth-router';
+
+import { register } from './controller/oauth-controller';
 
 const { MONGO_USER, MONGO_PWORD, MONGO_HOST, PORT } = process.env;
 
@@ -16,7 +17,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(bodyParser.json());
 
-app.use(oauthRoutes);
+app.use(OauthRouter);
 
-app.use(handleError);
+app.post('/api/oauth/v1/register', register);
+
 app.listen(PORT || 8080);

@@ -1,18 +1,16 @@
-import express from 'express';
+import { Router } from 'express';
 import OauthServer from 'express-oauth-server';
 import mongoose from 'mongoose';
-import * as model from '../model.js';
-import { signUp } from '../service/user-management.js';
-import { validateSignUp } from '../validations.js';
+import * as model from '../model';
 
-const router = express.Router();
+const OauthRouter = Router();
 
-const oauth = new OauthServer({
+export const oauth = new OauthServer({
     model,
     debug: true,
 });
 
-router.post(
+OauthRouter.post(
     '/api/oauth/v1/token',
     oauth.token({
         requireClientAuthentication: {
@@ -21,11 +19,11 @@ router.post(
     })
 );
 
-router.get('/api/oauth/v1/authenticate', async (req, res) => {
+OauthRouter.get('/api/oauth/v1/authenticate', async (req, res) => {
     return res.render('authenticate');
 });
 
-router.post(
+OauthRouter.post(
     '/api/oauth/v1/authenticate',
     async (req, res, next) => {
         const UserModel = mongoose.model('User');
@@ -44,10 +42,4 @@ router.post(
     })
 );
 
-router.post('/api/oauth/v1/register', async (req, res, next) => {
-    const request = req.body;
-    validateSignUp(request, next);
-    return signUp(request);
-});
-
-export default router;
+export default OauthRouter;

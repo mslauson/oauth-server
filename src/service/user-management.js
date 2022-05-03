@@ -2,7 +2,8 @@ import crypto from 'crypto';
 import UserModel from '../dao/UserModel';
 import OAuthClientModel from '../dao/OAuthClientModel';
 
-import { defaults } from '../constants/oauth-constants';
+import { defaults, errorMessages, validationMessages } from '../constants/oauth-constants';
+import { GenericBadRequestException, GenericInternalErrorException } from '@mslauson/express-error-handler';
 
 const createUser = async (requestBody) => {
     const newVerificationCode = crypto.randomBytes(28).toString('hex');
@@ -17,7 +18,13 @@ const createUser = async (requestBody) => {
     newUser.createdAt = new Date();
     newUser.updatedAt = new Date();
 
-    return newUser.create();
+    try {
+
+        return newUser.create();
+    } catch (e) {
+        console.error(e);
+        throw new GenericInternalErrorException(errorMessages.MONGO_ISSUE);
+    }
 };
 
 const createClient = async (user) => {
@@ -28,21 +35,27 @@ const createClient = async (user) => {
     newClient.clientSecret = crypto.randomBytes(50).toString('hex');
     newClient.createdAt = new Date();
     newClient.updatedAt = new Date();
-    let client;
     try {
-        client = await newClient.create();
+        return await newClient.create();
     } catch (error) {
         console.error(error);
+        throw new GenericInternalErrorException(errorMessages.MONGO_ISSUE);
     }
-    return client;
 };
 
 export const signUp = async (requestBody) => {
-    const user = createUser(requestBody);
-    const newClient = createClient(user);
-    if (newClient) {
-        return { success: true };
+    const existingUser = await UserModel.findOne({ email: requestBody.email });
+
+    if (existingUser) {
+        throw new GenericBadRequestException(validationMessages.USER_EXISTS);
     }
 
+    const user = createUser(requestBody);
+    if (user) {
+        const newClient = createClient(user);
+        if (newClient) {
+            return { success: true };
+        }
+    }
     return { success: false };
 };

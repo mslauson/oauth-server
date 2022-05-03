@@ -55,11 +55,15 @@ export const signUp = async (requestBody) => {
         throw new GenericBadRequestException(validationMessages.USER_EXISTS);
     }
 
-    const user = await createUser(requestBody);
+    const user = (await createUser(requestBody)).toObject();
     if (user) {
-        const newClient = await createClient(user);
+        const newClient = (await createClient(user)).toObject();
         if (newClient) {
-            return { success: true };
+            return {
+                success: true,
+                user: { ...user },
+                client: { ...newClient },
+            };
         }
     }
     return { success: false };

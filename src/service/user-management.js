@@ -1,6 +1,6 @@
 import crypto from 'crypto';
-import UserModel from '../dao/UserModel.js';
-import OAuthClientModel from '../dao/OAuthClientModel.js';
+import UserModel from '../../dao/UserModel.js';
+import OAuthClientModel from '../../dao/OAuthClientModel.js';
 
 import { defaults } from '../constants/oauth-constants.js';
 

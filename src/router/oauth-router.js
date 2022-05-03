@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import OauthServer from 'express-oauth-server';
 import mongoose from 'mongoose';
-import * as model from '../model';
+import * as model from '../../model';
 
 const OauthRouter = Router();
 

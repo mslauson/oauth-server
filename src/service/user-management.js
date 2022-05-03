@@ -17,7 +17,7 @@ const createUser = async (requestBody) => {
     newUser.createdAt = new Date();
     newUser.updatedAt = new Date();
 
-    return newUser.save().toObject();
+    return newUser.create();
 };
 
 const createClient = async (user) => {
@@ -30,7 +30,7 @@ const createClient = async (user) => {
     newClient.updatedAt = new Date();
     let client;
     try {
-        client = (await newClient.save()).toObject();
+        client = await newClient.create();
     } catch (error) {
         console.error(error);
     }

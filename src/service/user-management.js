@@ -12,7 +12,7 @@ import {
     errorMessages,
     validationMessages,
 } from '../constants/oauth-constants';
-import { encryptUserModel } from '../util/encryption-mapper';
+import { decryptUserModel, encryptUserModel } from '../util/encryption-mapper';
 
 const encryptionUtility = new EncryptionUtility();
 
@@ -68,7 +68,7 @@ export const signUp = async (requestBody) => {
     if (encryptedUser) {
         const newClient = (await createClient(encryptedUser)).toObject();
         if (newClient) {
-            const decryptedUser = encryptionUtility.decrypt(encryptedUser);
+            const decryptedUser = decryptUserModel(encryptedUser);
             return {
                 success: true,
                 user: { ...decryptedUser },

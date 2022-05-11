@@ -22,7 +22,7 @@ export const decryptUserModel = (model) => {
         username: encryptionUtility.decrypt(model.username),
         email: encryptionUtility.decrypt(model.email),
         verificationCode: encryptionUtility.decrypt(model.verificationCode),
-        password: encryptionUtility.decrypt(model.password),
+        password: model.password,
         createdAt: model.createdAt,
         updatedAt: model.updatedAt,
     };

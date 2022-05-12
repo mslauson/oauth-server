@@ -10,6 +10,7 @@ WORKDIR /usr/src/app
 # where available (npm@5+)
 COPY package*.json ./
 
+RUN npm config set @mslauson:always-auth=true
 RUN npm config set @mslauson:registry=https://npm.pkg.github.com
 RUN npm config set //npm.pkg.github.com/:_authToken $token
 RUN npm install

@@ -37,7 +37,7 @@ jobs:
       - name: Build and Push
         run: |
           docker buildx build -t "$REGISTRY_HOSTNAME"/"$GITHUB_ORG"/"$IMAGE"/"$IMAGE":dev-"$GITHUB_SHA" \
-            --build-arg TOKEN=$GITHUB_PWORD --push .
+            --build-arg token=$GITHUB_PWORD --push .
       - name: Set Up Kubectl
         run: |
           mkdir ~/.kube

@@ -11,6 +11,7 @@ env:
   GITHUB_ORG: mslauson
   GITHUB_USER: ${{ github.actor }}
   GITHUB_PWORD: ${{ secrets.GITHUB_TOKEN }}
+  PERSONAL_TOKEN: ${{secrets.PERSONAL_TOKEN}}
   KUBE_CONFIG: ${{secrets.KUBE_CONFIG}}
   GITHUB_PACKAGES_LOGIN: https://ghcr.io
   IMAGE: oauth-server
@@ -37,7 +38,7 @@ jobs:
       - name: Build and Push
         run: |
           docker buildx build -t "$REGISTRY_HOSTNAME"/"$GITHUB_ORG"/"$IMAGE"/"$IMAGE":dev-"$GITHUB_SHA" \
-            --build-arg token=$GITHUB_PWORD --push .
+            --build-arg token=$PERSONAL_TOKEN --push .
       - name: Set Up Kubectl
         run: |
           mkdir ~/.kube

@@ -1,5 +1,9 @@
 FROM node:18
 
+ENV TOKEN = ${TOKEN}
+
+ARG TOKEN = ${TOKEN}
+
 # Create app directory
 WORKDIR /usr/src/app
 
@@ -8,9 +12,8 @@ WORKDIR /usr/src/app
 # where available (npm@5+)
 COPY package*.json ./
 
-RUN echo "${TOKEN}"
 RUN npm config set @mslauson:registry=https://npm.pkg.github.com
-RUN npm config set //npm.pkg.github.com/:_authToken "${TOKEN}"
+RUN npm config set //npm.pkg.github.com/:_authToken $TOKEN
 RUN npm install
 # If you are building your code for production
 # RUN npm ci --only=production

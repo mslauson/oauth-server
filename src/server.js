@@ -20,5 +20,11 @@ app.use(bodyParser.json());
 app.use(OauthRouter);
 
 app.post('/api/oauth/v1/register', register);
+app.get('/api/oauth', () => {
+    return 'healthy';
+}));
+app.get('/', () => {
+    return 'healthy';
+}));
 
 app.listen(PORT || 8080);

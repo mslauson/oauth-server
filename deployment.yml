@@ -42,31 +42,31 @@ spec:
               scheme: HTTP
           ports:
             - containerPort: 8080
+          env:
+          - name: MONGO_USER
+            valueFrom:
+              secretKeyRef:
+                name: mongo-creds
+                key: username
+          - name: MONGO_PWORD
+            valueFrom:
+              secretKeyRef:
+                name: mongo-creds
+                key: password
+          - name: KEY
+            valueFrom:
+              secretKeyRef:
+                name: encryption-creds
+                key: key
+          - name: IV
+            valueFrom:
+              secretKeyRef:
+                name: encryption-creds
+                key: iv
+          - name: MONGO_HOST
+            valueFrom:
+              configMapKeyRef:
+                name: mongo-config
+                key: host
       imagePullSecrets:
         - name: regcred
-      env:
-       - name: MONGO_USER
-         valueFrom:
-           secretKeyRef:
-             name: mongo-creds
-             key: username
-       - name: MONGO_PWORD
-         valueFrom:
-           secretKeyRef:
-             name: mongo-creds
-             key: password
-       - name: KEY
-         valueFrom:
-           secretKeyRef:
-             name: encryption-creds
-             key: key
-       - name: IV
-         valueFrom:
-           secretKeyRef:
-             name: encryption-creds
-             key: iv
-       - name: MONGO_HOST
-         valueFrom:
-           configMapKeyRef:
-             name: mongo-config
-             key: host
